@@ -1,9 +1,89 @@
+<?php
+
+require __DIR__ . '/../src/FuelReceiptDTO.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $receipt = new \App\FuelReceiptDTO(
+        licencePlate: $_POST["license_plate"],
+        dateTime: $_POST["date_time"],
+        petrolStation: $_POST["petrol_station"],
+        refueled: $_POST["refueled"],
+        total: $_POST["total"],
+        currency: $_POST["currency"],
+        fuelPrice: $_POST["fuel_price"],
+        odometer: $_POST["odometer"]
+    );
+
+    try {
+        $pdo = new PDO("mysql:host=mysql;dbname=fuel;charset=utf8mb4", 'root', 'root', [
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]);
+    } catch (PDOException $e) {
+        throw new PDOException($e->getMessage(), (int)$e->getCode());
+    }
+
+    $sql = <<<MySQL
+        INSERT INTO fuel_receipts (license_plate, date_time, odometer, petrol_station, fuel_type, refueled, total, currency, fuel_price)
+        VALUES (:licencePlate, :dateTime, :odometer, :petrolStation, :fuelType, :refueled, :total, :currency, :fuelPrice)
+        MySQL;
+
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($receipt->toArray());
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Receipt Form</title>
+    <style>
+        /* Retro font */
+        body {
+            font-family: "Courier New", monospace;
+        }
+
+        /* Retro color scheme */
+        body {
+            background-color: #f0f0f0; /* beige */
+        }
+
+        h1 {
+            color: #008000; /* green */
+        }
+
+        form {
+            background-color: #cccccc; /* light gray */
+            padding: 20px;
+            border: 1px solid #666666; /* dark gray */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="text"], input[type="datetime-local"], input[type="number"], select {
+            background-color: #ffffff; /* white */
+            border: 1px solid #666666; /* dark gray */
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #008000; /* green */
+            color: #ffffff; /* white */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #00ff00; /* bright green */
+        }
+    </style>
 </head>
 <body>
 <h1>Fuel Receipt Form</h1>
@@ -39,7 +119,7 @@
     </select><br>
     Fuel Price: <input type="number" step="0.01" name="fuel_price"><br>
 
-    Odometer: <input type="number" name="Odometer"><br>
+    Odometer: <input type="number" name="odometer"><br>
     <input type="submit" value="Submit">
 </form>
 </body>
