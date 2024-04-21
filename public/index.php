@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/../src/FuelReceiptDTO.php';
+require __DIR__ . '/../src/FuelReceiptInsert.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $receipt = new \App\FuelReceiptDTO(
@@ -14,6 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         currency: $_POST['currency'],
     );
 
+    $receiptUpload = new \App\FuelReceiptInsert();
+    $receiptUpload->uploadFuelReceipt($receipt->toArray());
     var_dump($receipt->toArray());
 }
 
@@ -29,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 <h1>Fuel Receipt Form</h1>
-<form action="process.php" method="post">
+<form method="post">
     License Plate: <input type="text" name="license_plate"><br>
     Date and Time: <input type="datetime-local" name="date_time"><br>
     Petrol Station: <input type="text" name="petrol_station"><br>
