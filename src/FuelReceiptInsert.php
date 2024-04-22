@@ -2,15 +2,24 @@
 
 namespace App;
 use PDO;
+use PDOException;
 
 class FuelReceiptInsert
 {
+    private PDO $PDO;
     private function connectDB() : PDO{
-        $conn = new PDO(
-            dsn: 'mysql:host=localhost;dbname=myapp',
-            username: 'root',
-            password: 'root');
-        return $conn;
+        try{
+            return new \PDO(
+                'mysql:host=localhost;dbname=myapp;',
+                '',
+                '',
+                [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
+            );
+        }
+        catch (PDOException $e){
+            echo $e->getCode() . " " . $e->getMessage() . '<br>';
+        }
+        die("Shit went tits up...");
     }
     public function uploadFuelReceipt(array $data) : void{
         $conn = $this->connectDB();
