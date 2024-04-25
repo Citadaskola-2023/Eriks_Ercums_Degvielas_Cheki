@@ -6,7 +6,7 @@ require __DIR__ . "/../src/FuelReceiptRequest.php";
 //receive data
 $request = new \App\FuelReceiptRequest();
 echo "<div class='table'>";
-$request->requestData("SELECT * FROM Form");
+$request->requestData();
 echo "</div>";
 
 //send data

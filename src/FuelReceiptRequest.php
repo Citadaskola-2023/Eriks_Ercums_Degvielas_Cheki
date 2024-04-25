@@ -3,14 +3,8 @@
 namespace App;
 class FuelReceiptRequest
 {
-    public function requestData(string $query) : void{
-        $db = new DB();
-        $conn = $db->connectDB();
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
-
-        $columnNames = [
+    private const string url = 'receipt?';
+    private const columnNames = [
             'id' => 'ID',
             'licence_plate' => 'Licence Plate',
             'date_time' => 'Date and time',
@@ -22,8 +16,7 @@ class FuelReceiptRequest
             'fuel_price' => 'Fuel price',
             'odometer' => 'Odometer',
         ];
-
-        $orderBy = [
+    private const orderBy = [
             'id' => 'SELECT * FROM Form ORDER BY id',
             'licence_plate' => 'SELECT * FROM Form ORDER BY licence_plate',
             'date_time' => 'SELECT * FROM Form ORDER BY date_time',
@@ -35,14 +28,29 @@ class FuelReceiptRequest
             'fuel_price' => 'SELECT * FROM Form ORDER BY fuel_price',
             'odometer' => 'SELECT * FROM Form ORDER BY odometer',
         ];
+    private string $lastQurey = ' ';
+    public function requestData(string $query = 'SELECT * FROM Form') : void{
+        if($this->lastQuery == $query){
+            $query = parse_url($_SERVER['REQUEST_URI'])['query'];
+        }
+        else{
+            $this->lastQurey = $query;
+        }
+        echo "<h3> " . $query;
+        $db = new DB();
+        $conn = $db->connectDB();
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+
 
         if (!empty($results)) {
             echo '<table>';
-            // Assuming the first row contains column names
             echo '<tr>';
             foreach ($results[0] as $key => $value) {
-                if(array_key_exists($key, $columnNames)){
-                    echo '<th>' . '<button>' . $columnNames[$key] . '</button>'. '</th>';
+                if(array_key_exists($key, self::columnNames)){
+
+                    echo '<th>' . '<a href="' . self::url . self::orderBy[$key] . '">' . self::columnNames[$key] . '</a>'. '</th>';
                 }
                 else{
                     echo '<th>' . htmlspecialchars($key) . '</th>';
@@ -50,7 +58,7 @@ class FuelReceiptRequest
             }
             echo '</tr>';
 
-            // Output data rows
+
             foreach ($results as $row) {
                 echo '<tr>';
                 foreach ($row as $value) {
