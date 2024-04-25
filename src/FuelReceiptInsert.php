@@ -2,6 +2,8 @@
 
 namespace App;
 
+require __DIR__ . '/../src/DB.php';
+
 class FuelReceiptInsert
 {
     public function uploadFuelReceipt(array $data) : void{

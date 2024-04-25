@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $receiptUpload = new \App\FuelReceiptInsert();
     $receiptUpload->uploadFuelReceipt($receipt->toArray());
+
+    echo "<h3> RECEIPT DATA WAS ADD TO THE DATABASE";
 }
 
 ?>
@@ -66,6 +68,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     Odometer: <input type="number" name="odometer"><br>
     <input type="submit" value="Submit">
 </form>
+
+<div>
+
+</div class="table">
+
 </body>
 </html>
 

@@ -19,4 +19,13 @@ class DB
             die("Shit went tits up...");
         }
     }
+    public function login(string $username, string $password) : void{
+        if($username === 'user1' && $password === '0000'){
+            header("Location: /receipt");
+            exit;
+        }
+        else{
+            echo "<h3> WRONG USERNAME OR PASSWORD";
+        }
+    }
 }

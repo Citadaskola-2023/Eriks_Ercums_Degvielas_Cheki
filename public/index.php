@@ -2,9 +2,7 @@
 
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 $routes = [
-        '/' => '../controller/landing.php',
-        '/login' => '../controller/login.php',
-        '/signup' => '../controller/signup.php',
+        '/' => '../controller/login.php',
         '/receipt' => '../controller/receipt.php'
 ];
 

@@ -1,17 +1,12 @@
 <?php
+require __DIR__ . '/../src/DB.php';
 
-require __DIR__ . '/../src/UserManager.php';
-
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $userManager = new \App\UserManager();
-    if($userManager->login($_POST['username'], $_POST['password'])){
-        require '../controller/receipt.php';
-    }
-    echo "Login failed...";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $db = new \App\DB();
+    $db->login($_POST['username'], $_POST['password']);
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <form method="post">
     Username: <input type="text" name="username"><br>
     Password: <input type="text" name="password"><br>
-    <input type="submit" value="Submit">
+    <input value="submit" type="submit">
 </form>
 </body>
 </html>
