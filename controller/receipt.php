@@ -2,7 +2,14 @@
 
 require __DIR__ . '/../src/FuelReceiptDTO.php';
 require __DIR__ . '/../src/FuelReceiptInsert.php';
+require __DIR__ . "/../src/FuelReceiptRequest.php";
+//receive data
+$request = new \App\FuelReceiptRequest();
+echo "<div class='table'>";
+$request->requestData("SELECT * FROM Form");
+echo "</div>";
 
+//send data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $receipt = new \App\FuelReceiptDTO(
         licencePlate: $_POST['license_plate'],
@@ -68,10 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     Odometer: <input type="number" name="odometer"><br>
     <input type="submit" value="Submit">
 </form>
-
-<div>
-
-</div class="table">
 
 </body>
 </html>
