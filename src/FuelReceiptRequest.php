@@ -1,64 +1,100 @@
 <?php
 
 namespace App;
+
 class FuelReceiptRequest
 {
     private const string url = 'receipt?';
-    private const columnNames = [
-            'id' => 'ID',
-            'licence_plate' => 'Licence Plate',
-            'date_time' => 'Date and time',
-            'petrol_station' => 'Petrol station',
-            'fuel_type' => 'Fuel type',
-            'refueled' => 'Refueled',
-            'total' => 'Total',
-            'currency' => 'Currency',
-            'fuel_price' => 'Fuel price',
-            'odometer' => 'Odometer',
-        ];
+
+    private const columns = [
+        'ID',
+        'Licence Plate',
+        'Date and time',
+        'Petrol station',
+        'Fuel type',
+        'Refueled',
+        'Total',
+        'Currency',
+        'Fuel price',
+        'Odometer'
+    ];
+    private string $ascendingOrder = 'ASC';
     private const orderBy = [
-            'id' => 'SELECT * FROM Form ORDER BY id',
-            'licence_plate' => 'SELECT * FROM Form ORDER BY licence_plate',
-            'date_time' => 'SELECT * FROM Form ORDER BY date_time',
-            'petrol_station' => 'SELECT * FROM Form ORDER BY petrol_station',
-            'fuel_type' => 'SELECT * FROM Form ORDER BY fuel_type',
-            'refueled' => 'SELECT * FROM Form ORDER BY refueled',
-            'total' => 'SELECT * FROM Form ORDER BY total',
-            'currency' => 'SELECT * FROM Form ORDER BY currency',
-            'fuel_price' => 'SELECT * FROM Form ORDER BY fuel_price',
-            'odometer' => 'SELECT * FROM Form ORDER BY odometer',
-        ];
-    private string $lastQurey = ' ';
-    public function requestData(string $query = 'SELECT * FROM Form') : void{
-        if($this->lastQuery == $query){
-            $query = parse_url($_SERVER['REQUEST_URI'])['query'];
-        }
-        else{
-            $this->lastQurey = $query;
+        'ID' => 'SELECT * FROM Form ORDER BY id',
+        'Licence Plate' => 'SELECT * FROM Form ORDER BY licence_plate',
+        'Date and time' => 'SELECT * FROM Form ORDER BY date_time',
+        'Petrol station' => 'SELECT * FROM Form ORDER BY petrol_station',
+        'Fuel type' => 'SELECT * FROM Form ORDER BY fuel_type',
+        'Refueled' => 'SELECT * FROM Form ORDER BY refueled',
+        'Total' => 'SELECT * FROM Form ORDER BY total',
+        'Currency' => 'SELECT * FROM Form ORDER BY currency',
+        'Fuel price' => 'SELECT * FROM Form ORDER BY fuel_price',
+        'Odometer' => 'SELECT * FROM Form ORDER BY odometer',
+    ];
+
+    public function requestData(): void
+    {
+        //check
+        $query = parse_url($_SERVER['REQUEST_URI'])['query'];
+        $query = urldecode($query);
+        if (empty($query)) {
+            $query = 'SELECT * FROM Form';
         }
         echo "<h3> " . $query;
+
+        //ASC or DESC
+        if (stripos($query, 'ASC')) {
+            $this->ascendingOrder = 'DESC';
+        } else {
+            $this->ascendingOrder = 'ASC';
+        }
+
+        //connection
         $db = new DB();
         $conn = $db->connectDB();
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $results = $stmt->fetchAll();
 
+        //search
+        echo '<table>';
+        echo '<tr>';
+        foreach (self::columns as $column) {
+            echo '<th>' . '<a href="' . self::url . self::orderBy[$column] . ' ' . $this->ascendingOrder . '">' . $column . '</a>' . '</th>';
+        }
+        echo '</tr>';
 
-        if (!empty($results)) {
-            echo '<table>';
-            echo '<tr>';
-            foreach ($results[0] as $key => $value) {
-                if(array_key_exists($key, self::columnNames)){
+        echo '</table>';
 
-                    echo '<th>' . '<a href="' . self::url . self::orderBy[$key] . '">' . self::columnNames[$key] . '</a>'. '</th>';
-                }
-                else{
-                    echo '<th>' . htmlspecialchars($key) . '</th>';
+        if($query != 'SELECT * FROM Form' && !empty($query)){
+            //find column
+            $searchBy = '';
+
+            if(strpos($query, "ASC") || strpos($query, "DESC")){
+                $pos = strpos($query, 'ORDER BY');
+                if(!empty($pos)){
+                    $substring = substr($query, $pos + strlen("ORDER BY"));
+
+                    $asc_pos = strpos($substring, 'ASC');
+                    $desc_pos = strpos($substring, 'DESC');
+
+                    if(!empty($asc_pos)){
+                        $searchBy = trim(substr($substring, 0, $asc_pos));
+                    }
+                    else{
+                        $searchBy = trim(substr($substring, 0, $desc_pos));
+                    }
                 }
             }
-            echo '</tr>';
+            else{
+                $searchBy = substr(strrchr($query, ' '), 1);
+            }
+            echo $searchBy . ': <input type="text">';
+        }
 
-
+        //data table
+        if (!empty($results)) {
+            echo '<table>';
             foreach ($results as $row) {
                 echo '<tr>';
                 foreach ($row as $value) {
@@ -70,6 +106,5 @@ class FuelReceiptRequest
         } else {
             echo 'No results found.';
         }
-
     }
 }
