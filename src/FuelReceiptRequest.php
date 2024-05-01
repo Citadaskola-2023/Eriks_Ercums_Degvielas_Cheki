@@ -43,11 +43,23 @@ class FuelReceiptRequest
         echo "<h3> " . $query;
 
         //ASC or DESC
-        if (stripos($query, 'ASC')) {
-            $this->ascendingOrder = 'DESC';
-        } else {
-            $this->ascendingOrder = 'ASC';
+        $dom = new \DOMDocument();
+        $dom->loadHTMLFile('../html/receiptData.html');
+        $anchors = $dom->getElementsByTagName('a');
+
+        foreach ($anchors as $anchor) {
+            $href = $anchor->getAttribute('href');
+            $modifiedHref = '';
+            if(stripos($href, 'ASC')){
+                $modifiedHref = str_replace("ASC", "DESC", $href);
+            }
+            else if(stripos($href, 'DESC')){
+                $modifiedHref = str_replace("DESC", "ASC", $href);
+            }
+            $anchor->setAttribute('href', $modifiedHref);
         }
+
+        file_put_contents('../html/receiptData.html' ,$dom->saveHTML());
 
         //connection
         $db = new DB();
@@ -57,7 +69,7 @@ class FuelReceiptRequest
         $results = $stmt->fetchAll();
 
         //search
-        echo '<table>';
+        /*echo '<table>';
         echo '<tr>';
         foreach (self::columns as $column) {
             echo '<th>' . '<a href="' . self::url . self::orderBy[$column] . ' ' . $this->ascendingOrder . '">' . $column . '</a>' . '</th>';
@@ -90,7 +102,7 @@ class FuelReceiptRequest
                 $searchBy = substr(strrchr($query, ' '), 1);
             }
             echo $searchBy . ': <input type="text">';
-        }
+        }*/
 
         //data table
         if (!empty($results)) {
