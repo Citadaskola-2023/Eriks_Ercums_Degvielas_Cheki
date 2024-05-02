@@ -73,26 +73,32 @@ class FuelReceiptRequest
 
         file_put_contents('../html/receiptData.html', $dom->saveHTML());
 
-        //connection
-        $db = new DB();
-        $conn = $db->connectDB();
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
+        if(stristr($query, 'DROP')){
+            echo "<script>window.location.replace('/')</script>";
+            exit;
+        }
+        else {
+            //connection
+            $db = new DB();
+            $conn = $db->connectDB();
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
 
-        //data table
-        if (!empty($results)) {
-            echo '<table>';
-            foreach ($results as $row) {
-                echo '<tr>';
-                foreach ($row as $value) {
-                    echo '<td>' . htmlspecialchars($value) . '</td>';
+            //data table
+            if (!empty($results)) {
+                echo '<table>';
+                foreach ($results as $row) {
+                    echo '<tr>';
+                    foreach ($row as $value) {
+                        echo '<td>' . htmlspecialchars($value) . '</td>';
+                    }
+                    echo '</tr>';
                 }
-                echo '</tr>';
+                echo '</table>';
+            } else {
+                echo 'No results found.';
             }
-            echo '</table>';
-        } else {
-            echo 'No results found.';
         }
     }
 }
