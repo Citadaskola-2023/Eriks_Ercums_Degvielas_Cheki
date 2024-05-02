@@ -2,6 +2,8 @@
 
 namespace App;
 
+require __DIR__ . '/../src/DB.php';
+
 class FuelReceiptRequest
 {
     private const string url = 'receipt?';
@@ -32,6 +34,31 @@ class FuelReceiptRequest
         'Odometer' => 'SELECT * FROM Form ORDER BY odometer',
     ];
 
+    public string $idInput;
+    public string $licencePlateInput;
+    public string $dateTimeInput;
+    public string $petrolStationInput;
+    public string $fuelTypeInput;
+    public string $refueledInput;
+    public string $totalInput;
+    public string $currencyInput;
+    public string $fuelPriceInput;
+    public string $odometerInput;
+
+    public function getSearchInputs(): void
+    {
+        $this->idInput = $_POST['idInput'];
+        $this->licencePlateInput = $_POST['licencePlateInput'];
+        $this->dateTimeInput = $_POST['dateTimeInput'];
+        $this->petrolStationInput = $_POST['petrolStationInput'];
+        $this->fuelTypeInput = $_POST['fuelTypeInput'];
+        $this->refueledInput = $_POST['refueledInput'];
+        $this->totalInput = $_POST['totalInput'];
+        $this->currencyInput = $_POST['currencyInput'];
+        $this->fuelPriceInput = $_POST['fuelPriceInput'];
+        $this->odometerInput = $_POST['odometerInput'];
+    }
+
     public function requestData(): void
     {
         //check
@@ -50,16 +77,17 @@ class FuelReceiptRequest
         foreach ($anchors as $anchor) {
             $href = $anchor->getAttribute('href');
             $modifiedHref = '';
-            if(stripos($href, 'ASC')){
+            if (stripos($href, 'ASC')) {
                 $modifiedHref = str_replace("ASC", "DESC", $href);
-            }
-            else if(stripos($href, 'DESC')){
-                $modifiedHref = str_replace("DESC", "ASC", $href);
+            } else {
+                if (stripos($href, 'DESC')) {
+                    $modifiedHref = str_replace("DESC", "ASC", $href);
+                }
             }
             $anchor->setAttribute('href', $modifiedHref);
         }
 
-        file_put_contents('../html/receiptData.html' ,$dom->saveHTML());
+        file_put_contents('../html/receiptData.html', $dom->saveHTML());
 
         //connection
         $db = new DB();

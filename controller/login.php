@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Receipt Form</title>
-    <link href="../public/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../styles/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <h1>Login</h1>

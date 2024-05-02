@@ -4,33 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Receipt Form</title>
-    <link href="../public/style.css" rel="stylesheet" type="text/css">
+    <link href="../styles/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<form method="POST">
 <table>
     <tbody>
     <tr>
         <th>
-            <a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20id%20DESC">ID</a>
-            <input type="number" id="idNumber">
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20id%20DESC">ID</a><br>
+            <input type="number" id="idInput" name="idInput">
         </th>
         <th>
-            <a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20licence_plate%20DESC">Licence Plate</a>
-            <input type="" id="idNumber">
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20licence_plate%20DESC">Licence Plate</a><br>
+            <input type="text" id="licencePlateInput" name="licencePlateInput">
         </th>
-        <th><a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20date_time%20DESC">Date and time</a></th>
-        <th><a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20petrol_station%20DESC">Petrol station</a></th>
-        <th><a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20fuel_type%20DESC">Fuel type</a></th>
-        <th><a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20refueled%20DESC">Refueled</a></th>
-        <th><a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20total%20DESC">Total</a></th>
-        <th><a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20currency%20DESC">Currency</a></th>
-        <th><a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20fuel_price%20DESC">Fuel price</a></th>
-        <th><a href="receipt?SELECT%20*%20FROM%20Form%20ORDER%20BY%20odometer%20DESC">Odometer</a></th>
+        <th>
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20date_time%20DESC">Date and time</a><br>
+            <input type="date" id="dateTimeInput" name="dateTimeInput">
+        </th>
+        <th>
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20petrol_station%20DESC">Petrol station</a><br>
+            <input type="text" id="petrolStationInput" name="petrolStationInput">
+        </th>
+        <th>
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20fuel_type%20DESC">Fuel type</a><br>
+            <input type="text" id="fuelTypeInput" name="fuelTypeInput">
+        </th>
+        <th>
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20refueled%20DESC">Refueled</a><br>
+            <input type="number" id="refueledInput" name="refueledInput">
+        </th>
+        <th>
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20total%20DESC">Total</a><br>
+            <input type="number" id="totalInput" name="totalInput">
+        </th>
+        <th>
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20currency%20DESC">Currency</a><br>
+            <input type="text" id="currencyInput" name="currencyInput">
+        </th>
+        <th>
+            <a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20fuel_price%20DESC">Fuel price</a><br>
+            <input type="number" id="fuelPriceInput" name="fuelPriceInput">
+        </th>
+        <th><a href="data?SELECT%20*%20FROM%20Form%20ORDER%20BY%20odometer%20DESC">Odometer</a><br>
+            <input type="number" id="odometerInput" name="odometerInput">
+        </th>
     </tr>
     </tbody>
 </table>
-<label for="searchField" id="searchFieldLabel"></label>
-<input type="text" id="searchField" name="searchField">
-<a href="" id="searchButton">Search</a>
+</form>
+<button id="searchButton">Search</button>
 </body>
+<script>
+    document.getElementById("searchButton").addEventListener("click", function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "../src/search.php", true);
+        xhr.onload = function() {
+            console.log(xhr.responseText);
+        };
+        xhr.send();
+    });
+</script>
 </html>
