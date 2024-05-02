@@ -9,3 +9,6 @@ require __DIR__ . '/../src/FuelReceiptRequest.php';
 require '../html/receiptData.html';
 $request = new \App\FuelReceiptRequest();
 $request->requestData();
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $request->getSearchInputs();
+}

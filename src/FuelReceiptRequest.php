@@ -6,57 +6,41 @@ require __DIR__ . '/../src/DB.php';
 
 class FuelReceiptRequest
 {
-    private const string url = 'receipt?';
-
-    private const columns = [
-        'ID',
-        'Licence Plate',
-        'Date and time',
-        'Petrol station',
-        'Fuel type',
-        'Refueled',
-        'Total',
-        'Currency',
-        'Fuel price',
-        'Odometer'
-    ];
-    private string $ascendingOrder = 'ASC';
-    private const orderBy = [
-        'ID' => 'SELECT * FROM Form ORDER BY id',
-        'Licence Plate' => 'SELECT * FROM Form ORDER BY licence_plate',
-        'Date and time' => 'SELECT * FROM Form ORDER BY date_time',
-        'Petrol station' => 'SELECT * FROM Form ORDER BY petrol_station',
-        'Fuel type' => 'SELECT * FROM Form ORDER BY fuel_type',
-        'Refueled' => 'SELECT * FROM Form ORDER BY refueled',
-        'Total' => 'SELECT * FROM Form ORDER BY total',
-        'Currency' => 'SELECT * FROM Form ORDER BY currency',
-        'Fuel price' => 'SELECT * FROM Form ORDER BY fuel_price',
-        'Odometer' => 'SELECT * FROM Form ORDER BY odometer',
-    ];
-
-    public string $idInput;
+    public string $idInputMin;
+    public string $idInputMax;
     public string $licencePlateInput;
-    public string $dateTimeInput;
+    public string $dateTimeInputMin;
+    public string $dateTimeInputMax;
     public string $petrolStationInput;
     public string $fuelTypeInput;
-    public string $refueledInput;
-    public string $totalInput;
+    public string $refueledInputMin;
+    public string $refueledInputMax;
+    public string $totalInputMin;
+    public string $totalInputMax;
     public string $currencyInput;
-    public string $fuelPriceInput;
-    public string $odometerInput;
+    public string $fuelPriceInputMin;
+    public string $fuelPriceInputMax;
+    public string $odometerInputMin;
+    public string $odometerInputMax;
 
     public function getSearchInputs(): void
     {
-        $this->idInput = $_POST['idInput'];
+        $this->idInputMin = $_POST['idInputMin'];
+        $this->idInputMax = $_POST['idInputMax'];
         $this->licencePlateInput = $_POST['licencePlateInput'];
-        $this->dateTimeInput = $_POST['dateTimeInput'];
+        $this->dateTimeInputMin = $_POST['dateTimeInputMin'];
+        $this->dateTimeInputMax = $_POST['dateTimeInputMax'];
         $this->petrolStationInput = $_POST['petrolStationInput'];
         $this->fuelTypeInput = $_POST['fuelTypeInput'];
-        $this->refueledInput = $_POST['refueledInput'];
-        $this->totalInput = $_POST['totalInput'];
+        $this->refueledInputMin = $_POST['refueledInputMin'];
+        $this->refueledInputMax = $_POST['refueledInputMax'];
+        $this->totalInputMin = $_POST['totalInputMin'];
+        $this->totalInputMax = $_POST['totalInputMax'];
         $this->currencyInput = $_POST['currencyInput'];
-        $this->fuelPriceInput = $_POST['fuelPriceInput'];
-        $this->odometerInput = $_POST['odometerInput'];
+        $this->fuelPriceInputMin = $_POST['fuelPriceInputMin'];
+        $this->fuelPriceInputMax = $_POST['fuelPriceInputMax'];
+        $this->odometerInputMin = $_POST['odometerInputMin'];
+        $this->odometerInputMax = $_POST['odometerInputMax'];
     }
 
     public function requestData(): void
