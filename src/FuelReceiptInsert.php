@@ -18,6 +18,7 @@ class FuelReceiptInsert
                 'currency' => $_POST['currency'],
                 'fuel_price' => $_POST['fuel_price'],
                 'odometer' => $_POST['odometer'],
+                'total' => $_POST['fuel_price'] * $_POST['refueled'],
             ];
         }
         die("<h3> Could not get form input data </h3>");
@@ -26,8 +27,8 @@ class FuelReceiptInsert
         $DB = new DB();
         $conn = $DB->connectDB();
         $stmt = $conn->prepare("INSERT INTO Form(licence_plate, date_time,
-         petrol_station, fuel_type, refueled, currency, fuel_price, odometer)
-         VALUES(:licence_plate, :date_time, :petrol_station, :fuel_type, :refueled, :currency, :fuel_price, :odometer)");
+         petrol_station, fuel_type, refueled, currency, fuel_price, odometer, total)
+         VALUES(:licence_plate, :date_time, :petrol_station, :fuel_type, :refueled, :currency, :fuel_price, :odometer, :total)");
         $stmt->execute($data);
     }
 }

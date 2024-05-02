@@ -96,42 +96,6 @@ class FuelReceiptRequest
         $stmt->execute();
         $results = $stmt->fetchAll();
 
-        //search
-        /*echo '<table>';
-        echo '<tr>';
-        foreach (self::columns as $column) {
-            echo '<th>' . '<a href="' . self::url . self::orderBy[$column] . ' ' . $this->ascendingOrder . '">' . $column . '</a>' . '</th>';
-        }
-        echo '</tr>';
-
-        echo '</table>';
-
-        if($query != 'SELECT * FROM Form' && !empty($query)){
-            //find column
-            $searchBy = '';
-
-            if(strpos($query, "ASC") || strpos($query, "DESC")){
-                $pos = strpos($query, 'ORDER BY');
-                if(!empty($pos)){
-                    $substring = substr($query, $pos + strlen("ORDER BY"));
-
-                    $asc_pos = strpos($substring, 'ASC');
-                    $desc_pos = strpos($substring, 'DESC');
-
-                    if(!empty($asc_pos)){
-                        $searchBy = trim(substr($substring, 0, $asc_pos));
-                    }
-                    else{
-                        $searchBy = trim(substr($substring, 0, $desc_pos));
-                    }
-                }
-            }
-            else{
-                $searchBy = substr(strrchr($query, ' '), 1);
-            }
-            echo $searchBy . ': <input type="text">';
-        }*/
-
         //data table
         if (!empty($results)) {
             echo '<table>';
