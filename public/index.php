@@ -11,5 +11,5 @@ if(array_key_exists($uri, $routes)){
     require $routes[$uri];
 }
 else{
-    echo "No page found..." . "<br>";
+    echo "404 try again..." . "<br>";
 }

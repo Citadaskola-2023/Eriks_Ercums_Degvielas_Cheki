@@ -146,7 +146,6 @@ class FuelReceiptRequest
             }
         }
 
-        echo "<h2>Called from request</h2>";
         $this->displayData($query);
     }
 
@@ -174,7 +173,11 @@ class FuelReceiptRequest
         $dom->loadHTMLFile('../html/data.html');
         $dataTable = $dom->getElementById('dataTable');
 
-        $this->checkEmpty($dom);
+        if ($dataTable->hasChildNodes()) {
+            while ($dataTable->hasChildNodes()) {
+                $dataTable->removeChild($dataTable->firstChild);
+            }
+        }
 
         //add data
         if (!empty($results)) {
@@ -195,17 +198,5 @@ class FuelReceiptRequest
         file_put_contents('../html/data.html', $dom->saveHTML());
         echo "<script>window.location.replace('/data?')</script>";
         exit;
-    }
-
-    public function checkEmpty(\DOMDocument $dom) : void{
-        $dom->loadHTMLFile('../html/data.html');
-        $dataTable = $dom->getElementById('dataTable');
-
-        if ($dataTable->hasChildNodes()) {
-            while ($dataTable->hasChildNodes()) {
-                echo "<h1>Data clear...</h1>";
-                $dataTable->removeChild($dataTable->firstChild);
-            }
-        }
     }
 }
