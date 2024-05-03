@@ -23,6 +23,8 @@ class FuelReceiptRequest
     public string $odometerInputMin;
     public string $odometerInputMax;
 
+    private const bannedWords = ['DROP', 'INSERT'];
+
     public function getSearchInputs(): void
     {
         $this->idInputMin = $_POST['idInputMin'];
@@ -41,6 +43,13 @@ class FuelReceiptRequest
         $this->fuelPriceInputMax = $_POST['fuelPriceInputMax'];
         $this->odometerInputMin = $_POST['odometerInputMin'];
         $this->odometerInputMax = $_POST['odometerInputMax'];
+
+        $sqlQuery = 'SELECT * FROM Form WHERE 1=1';
+        if(!empty($this->idInputMin)){
+            $sqlQuery = $sqlQuery . ' AND id >= ' . $this->idInputMin;
+        }
+
+        $this->displayData($sqlQuery);
     }
 
     public function requestData(): void
@@ -55,7 +64,7 @@ class FuelReceiptRequest
 
         //ASC or DESC
         $dom = new \DOMDocument();
-        $dom->loadHTMLFile('../html/receiptData.html');
+        $dom->loadHTMLFile('../html/data.html');
         $anchors = $dom->getElementsByTagName('a');
 
         foreach ($anchors as $anchor) {
@@ -71,11 +80,21 @@ class FuelReceiptRequest
             $anchor->setAttribute('href', $modifiedHref);
         }
 
-        file_put_contents('../html/receiptData.html', $dom->saveHTML());
+        file_put_contents('../html/data.html', $dom->saveHTML());
 
-        $bannedWords = ['DROP', 'INSERT'];
 
-        foreach ($bannedWords as $bw) {
+        foreach (self::bannedWords as $bw) {
+            if (stristr($query, $bw)) {
+                echo "<script>window.location.replace('/')</script>";
+                exit;
+            }
+        }
+
+        $this->displayData($query);
+    }
+
+    private function displayData(string $query) : void{
+        foreach (self::bannedWords as $bw) {
             if (stristr($query, $bw)) {
                 echo "<script>window.location.replace('/')</script>";
                 exit;
@@ -89,19 +108,34 @@ class FuelReceiptRequest
         $stmt->execute();
         $results = $stmt->fetchAll();
 
-        //data table
-        if (!empty($results)) {
-            echo '<table>';
-            foreach ($results as $row) {
-                echo '<tr>';
-                foreach ($row as $value) {
-                    echo '<td>' . htmlspecialchars($value) . '</td>';
-                }
-                echo '</tr>';
+        //dataTable
+        //get dataTable div
+        $dom = new \DOMDocument();
+        $dom->loadHTMLFile('../html/data.html');
+        $dataTable = $dom->getElementById('dataTable');
+
+        //clear it if not empty
+        if ($dataTable->hasChildNodes()) {
+            while ($dataTable->hasChildNodes()) {
+                $dataTable->removeChild($dataTable->firstChild);
             }
-            echo '</table>';
+        }
+        //add data
+        if (!empty($results)) {
+            $table = $dom->createElement('table');
+            foreach ($results as $row) {
+                $tr = $dom->createElement('tr');
+                foreach ($row as $value) {
+                    $td = $dom->createElement('td', htmlspecialchars($value));
+                    $tr->appendChild($td);
+                }
+                $table->appendChild($tr);
+            }
+            $dataTable->appendChild($table);
         } else {
             echo 'No results found.';
         }
+
+        file_put_contents('../html/data.html', $dom->saveHTML());
     }
 }
