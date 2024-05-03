@@ -105,6 +105,10 @@ class FuelReceiptRequest
             $sqlQuery .= ' AND odometer <= ' . $this->odometerInputMax;
         }
 
+        $_POST['sortBy'] = 'refueled';
+        $_POST['sortDirection'] = 'ASC';
+        // ORDER BY {} ASC/DESC
+
         $this->displayData($sqlQuery);
     }
 
