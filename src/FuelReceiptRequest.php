@@ -23,7 +23,7 @@ class FuelReceiptRequest
     public string $odometerInputMin;
     public string $odometerInputMax;
 
-    private const bannedWords = ['DROP', 'INSERT'];
+    private const array bannedWords = ['DROP', 'INSERT'];
 
     public function getSearchInputs(): void
     {
@@ -45,8 +45,64 @@ class FuelReceiptRequest
         $this->odometerInputMax = $_POST['odometerInputMax'];
 
         $sqlQuery = 'SELECT * FROM Form WHERE 1=1';
-        if(!empty($this->idInputMin)){
-            $sqlQuery = $sqlQuery . ' AND id >= ' . $this->idInputMin;
+        //id
+        //id
+        if (!empty($this->idInputMin)) {
+            $sqlQuery .= ' AND id >= ' . $this->idInputMin;
+        }
+        if (!empty($this->idInputMax)) {
+            $sqlQuery .= ' AND id <= ' . $this->idInputMax;
+        }
+        //licence plate
+        if (!empty($this->licencePlateInput)) {
+            $sqlQuery .= ' AND licence_plate = "' . $this->licencePlateInput . '"';
+        }
+        // date time
+        if (!empty($this->dateTimeInputMin)) {
+            $sqlQuery .= ' AND date_time >= "' . $this->dateTimeInputMin . '"';
+        }
+        if (!empty($this->dateTimeInputMax)) {
+            $sqlQuery .= ' AND date_time <= "' . $this->dateTimeInputMax . '"';
+        }
+        // petrol station
+        if (!empty($this->petrolStationInput)) {
+            $sqlQuery .= ' AND petrol_station = "' . $this->petrolStationInput . '"';
+        }
+        // fuel type
+        if (!empty($this->fuelTypeInput)) {
+            $sqlQuery .= ' AND fuel_type = "' . $this->fuelTypeInput . '"';
+        }
+        // refueled
+        if (!empty($this->refueledInputMin)) {
+            $sqlQuery .= ' AND refueled >= ' . $this->refueledInputMin;
+        }
+        if (!empty($this->refueledInputMax)) {
+            $sqlQuery .= ' AND refueled <= ' . $this->refueledInputMax;
+        }
+        // total
+        if (!empty($this->totalInputMin)) {
+            $sqlQuery .= ' AND total >= ' . $this->totalInputMin;
+        }
+        if (!empty($this->totalInputMax)) {
+            $sqlQuery .= ' AND total <= ' . $this->totalInputMax;
+        }
+        // currency
+        if (!empty($this->currencyInput)) {
+            $sqlQuery .= ' AND currency = "' . $this->currencyInput . '"';
+        }
+        // fuel price
+        if (!empty($this->fuelPriceInputMin)) {
+            $sqlQuery .= ' AND fuel_price >= ' . $this->fuelPriceInputMin;
+        }
+        if (!empty($this->fuelPriceInputMax)) {
+            $sqlQuery .= ' AND fuel_price <= ' . $this->fuelPriceInputMax;
+        }
+        // odometer
+        if (!empty($this->odometerInputMin)) {
+            $sqlQuery .= ' AND odometer >= ' . $this->odometerInputMin;
+        }
+        if (!empty($this->odometerInputMax)) {
+            $sqlQuery .= ' AND odometer <= ' . $this->odometerInputMax;
         }
 
         $this->displayData($sqlQuery);
@@ -90,10 +146,12 @@ class FuelReceiptRequest
             }
         }
 
+        echo "<h2>Called from request</h2>";
         $this->displayData($query);
     }
 
-    private function displayData(string $query) : void{
+    private function displayData(string $query): void
+    {
         foreach (self::bannedWords as $bw) {
             if (stristr($query, $bw)) {
                 echo "<script>window.location.replace('/')</script>";
@@ -107,6 +165,8 @@ class FuelReceiptRequest
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $results = $stmt->fetchAll();
+        echo "<h4>" . var_dump($results) . "</h4>";
+        echo "<h4>" . var_dump($stmt) . "</h4>";
 
         //dataTable
         //get dataTable div
@@ -114,12 +174,8 @@ class FuelReceiptRequest
         $dom->loadHTMLFile('../html/data.html');
         $dataTable = $dom->getElementById('dataTable');
 
-        //clear it if not empty
-        if ($dataTable->hasChildNodes()) {
-            while ($dataTable->hasChildNodes()) {
-                $dataTable->removeChild($dataTable->firstChild);
-            }
-        }
+        $this->checkEmpty($dom);
+
         //add data
         if (!empty($results)) {
             $table = $dom->createElement('table');
@@ -133,9 +189,23 @@ class FuelReceiptRequest
             }
             $dataTable->appendChild($table);
         } else {
-            echo 'No results found.';
+            echo 'Sudi...';
         }
 
         file_put_contents('../html/data.html', $dom->saveHTML());
+        echo "<script>window.location.replace('/data?')</script>";
+        exit;
+    }
+
+    public function checkEmpty(\DOMDocument $dom) : void{
+        $dom->loadHTMLFile('../html/data.html');
+        $dataTable = $dom->getElementById('dataTable');
+
+        if ($dataTable->hasChildNodes()) {
+            while ($dataTable->hasChildNodes()) {
+                echo "<h1>Data clear...</h1>";
+                $dataTable->removeChild($dataTable->firstChild);
+            }
+        }
     }
 }
