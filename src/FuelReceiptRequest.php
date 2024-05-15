@@ -23,8 +23,6 @@ class FuelReceiptRequest
     public string $odometerInputMin;
     public string $odometerInputMax;
 
-    private const array bannedWords = ['DROP', 'INSERT'];
-
     public function getSearchInputs(): void
     {
         $this->idInputMin = $_POST['idInputMin'];
@@ -141,14 +139,6 @@ class FuelReceiptRequest
         }
 
         file_put_contents('../html/data.html', $dom->saveHTML());
-
-
-        foreach (self::bannedWords as $bw) {
-            if (stristr($query, $bw)) {
-                echo "<script>window.location.replace('/')</script>";
-                exit;
-            }
-        }
 
         $this->displayData($query);
     }
