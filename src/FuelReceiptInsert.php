@@ -52,7 +52,7 @@ class FuelReceiptInsert
                 die("Wrong input: Fuel type");
             }
             //Refueled
-            if(!is_string($data['refueled'])){
+            if(!preg_match('/^\d+(\.\d+)?$/', $data['refueled'])){
                 die("Wrong input: Refueled");
             }
             //Currency
