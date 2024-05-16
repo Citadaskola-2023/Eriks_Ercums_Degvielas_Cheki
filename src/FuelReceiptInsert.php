@@ -9,7 +9,6 @@ require __DIR__ . '/../src/DB.php';
 
 class FuelReceiptInsert
 {
-    private const array bannedWords = ['DROP', 'INSERT'];
     private const array currency = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'CHF', 'AUD', 'HKD', 'NZD', 'SEK',
     'NOK', 'DKK', 'THB', 'INR', 'CNY', 'SGD', 'TWD', 'KRW', 'MXN', 'BBL', 'ZAR'];
     public function getFormInput(): array
@@ -24,7 +23,7 @@ class FuelReceiptInsert
                 'currency' => $_POST['currency'],
                 'fuel_price' => $_POST['fuel_price'],
                 'odometer' => $_POST['odometer'],
-                'total' => $_POST['fuel_price'] * $_POST['refueled'],
+                'total' => ''
             ];
             //Convert time zone
             $localDT = new DateTime($data['date_time'], new DateTimeZone(date_default_timezone_get()));
@@ -75,12 +74,15 @@ class FuelReceiptInsert
             if(!preg_match('/^[0-9]+$/', $data['odometer'])){
                 die("Wrong input: Odometer");
             }
+            $data['total'] = $data['fuel_price'] * $data['refueled'];
+            return $data;
         }
         die("<h3> Could not get form input data </h3>");
     }
     public function checkBannedWords(array $input) : bool{
+        $db = new DB();
         foreach($input as $data){
-            foreach (self::bannedWords as $bw) {
+            foreach ($db::bannedWords as $bw) {
                 if (stristr($data, $bw)) {
                     return false;
                 }

@@ -1,7 +1,9 @@
 <?php
-
+require __DIR__ . '/../src/LoginSystem.php';
+$login = new \App\LoginSystem();
+$login->isLoggedIn();
 //load header
-require '../html/header.html';
+require '../controller/header.php';
 
 require __DIR__ . '/../src/FuelReceiptRequest.php';
 

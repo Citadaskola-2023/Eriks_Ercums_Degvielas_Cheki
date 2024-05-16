@@ -44,7 +44,6 @@ class FuelReceiptRequest
 
         $sqlQuery = 'SELECT * FROM Form WHERE 1=1';
         //id
-        //id
         if (!empty($this->idInputMin)) {
             $sqlQuery .= ' AND id >= ' . $this->idInputMin;
         }
@@ -103,49 +102,15 @@ class FuelReceiptRequest
             $sqlQuery .= ' AND odometer <= ' . $this->odometerInputMax;
         }
 
-        $_POST['sortBy'] = 'refueled';
-        $_POST['sortDirection'] = 'ASC';
-        // ORDER BY {} ASC/DESC
-
         $this->displayData($sqlQuery);
     }
 
-    public function requestData(): void
-    {
-        //check
-        $query = parse_url($_SERVER['REQUEST_URI'])['query'];
-        $query = urldecode($query);
-        if (empty($query)) {
-            $query = 'SELECT * FROM Form';
-        }
-        echo "<h3> " . $query;
 
-        //ASC or DESC
-        $dom = new \DOMDocument();
-        $dom->loadHTMLFile('../html/data.html');
-        $anchors = $dom->getElementsByTagName('a');
-
-        foreach ($anchors as $anchor) {
-            $href = $anchor->getAttribute('href');
-            $modifiedHref = '';
-            if (stripos($href, 'ASC')) {
-                $modifiedHref = str_replace("ASC", "DESC", $href);
-            } else {
-                if (stripos($href, 'DESC')) {
-                    $modifiedHref = str_replace("DESC", "ASC", $href);
-                }
-            }
-            $anchor->setAttribute('href', $modifiedHref);
-        }
-
-        file_put_contents('../html/data.html', $dom->saveHTML());
-
-        $this->displayData($query);
-    }
 
     private function displayData(string $query): void
     {
-        foreach (self::bannedWords as $bw) {
+        $db = new DB();
+        foreach ($db::bannedWords as $bw) {
             if (stristr($query, $bw)) {
                 echo "<script>window.location.replace('/')</script>";
                 exit;
@@ -153,13 +118,10 @@ class FuelReceiptRequest
         }
 
         //connection
-        $db = new DB();
         $conn = $db->connectDB();
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $results = $stmt->fetchAll();
-        echo "<h4>" . var_dump($results) . "</h4>";
-        echo "<h4>" . var_dump($stmt) . "</h4>";
 
         //dataTable
         //get dataTable div
@@ -185,8 +147,6 @@ class FuelReceiptRequest
                 $table->appendChild($tr);
             }
             $dataTable->appendChild($table);
-        } else {
-            echo 'Sudi...';
         }
 
         file_put_contents('../html/data.html', $dom->saveHTML());

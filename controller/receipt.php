@@ -1,9 +1,11 @@
 <?php
-
+require __DIR__ . '/../src/LoginSystem.php';
+$login = new \App\LoginSystem();
+$login->isLoggedIn();
 require __DIR__ . '/../src/FuelReceiptInsert.php';
 
 //load header
-require '../html/header.html';
+require '../controller/header.php';
 
 //load form
 require '../html/form.html';

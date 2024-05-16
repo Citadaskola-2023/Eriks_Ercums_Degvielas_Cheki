@@ -1,9 +1,14 @@
 <?php
-require __DIR__ . '/../src/DB.php';
+require __DIR__ . '/../src/LoginSystem.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $db = new \App\DB();
-    $db->login($_POST['username'], $_POST['password']);
+    $loginSystem = new \App\LoginSystem();
+    if ($loginSystem->login($_POST['username'], $_POST['password'])) {
+        header("Location: /receipt");
+        exit;
+    } else {
+        echo "<h3> WRONG USERNAME OR PASSWORD </h3>";
+    }
 }
 
 ?>

@@ -5,6 +5,7 @@ use PDO;
 use PDOException;
 class DB
 {
+    public const array bannedWords = ['DROP', 'INSERT', '<', '>'];
     public function connectDB() : PDO{
         try{
             $pdo = new PDO('mysql:host=mysql;dbname=myapp;',
@@ -17,15 +18,6 @@ class DB
         catch (PDOException $e){
             echo $e->getCode() . " " . $e->getMessage() . '<br>';
             die("Shit went tits up...");
-        }
-    }
-    public function login(string $username, string $password) : void{
-        if($username === 'user1' && $password === '0000'){
-            header("Location: /receipt?");
-            exit;
-        }
-        else{
-            echo "<h3> WRONG USERNAME OR PASSWORD";
         }
     }
 
