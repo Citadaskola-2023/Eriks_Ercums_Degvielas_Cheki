@@ -1,7 +1,7 @@
 <?php
-require __DIR__ . '/../src/LoginSystem.php';
-$login = new \App\LoginSystem();
-$login->isLoggedIn();
+/*require_once '../src/LoginSystem.php';
+$loginSystem = new \App\LoginSystem();
+$loginSystem->isLoggedIn();*/
 //load header
 require '../controller/header.php';
 

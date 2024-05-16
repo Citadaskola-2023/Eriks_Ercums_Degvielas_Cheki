@@ -1,9 +1,9 @@
 <?php
-require __DIR__ . '/../src/LoginSystem.php';
-$login = new \App\LoginSystem();
-$login->isLoggedIn();
-require __DIR__ . '/../src/FuelReceiptInsert.php';
+/*require_once '../src/LoginSystem.php';
+$loginSystem = new \App\LoginSystem();
+$loginSystem->isLoggedIn();*/
 
+require __DIR__ . '/../src/FuelReceiptInsert.php';
 //load header
 require '../controller/header.php';
 

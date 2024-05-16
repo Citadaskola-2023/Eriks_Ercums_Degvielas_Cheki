@@ -1,0 +1,69 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+form {
+    margin: 20px auto;
+    max-width: 2000px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th {
+    text-align: left;
+    padding: 10px;
+}
+
+th a {
+    text-decoration: none;
+    color: #333;
+}
+
+th input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+input[type="submit"] {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#dataTable {
+    max-width: 2000px;
+    margin: 0 auto;
+}
+
+#dataTable table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#dataTable th,
+#dataTable td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+#dataTable th:first-child,
+#dataTable td:first-child {
+    border-left: 1px solid #ddd;
+}
+
+#dataTable th:last-child,
+#dataTable td:last-child {
+    border-right: 1px solid #ddd;
+}
