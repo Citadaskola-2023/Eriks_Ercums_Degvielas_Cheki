@@ -39,23 +39,23 @@ class FuelReceiptInsert
                 die("Contains banned words");
             }
             //Licence plate
-            if(!is_string($data['licence_plate'])){
+            if(!is_string($data['licence_plate']) && !empty($data['licence_plate'])){
                 die("Wrong input: Licence plate");
             }
             //Date time
-            if(!preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $data['date_time'])){
+            if(!preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $data['date_time']) && !empty($data['date_time'])){
                 die("Wrong input: Date time");
             }
             //Petrol station
-            if(!is_string($data['petrol_station'])){
+            if(!is_string($data['petrol_station']) && !empty($data['petrol_station'])){
                 die("Wrong input: Petrol station");
             }
             //Fuel type
-            if(!is_string($data['fuel_type'])){
+            if(!is_string($data['fuel_type']) && !empty($data['fuel_type'])){
                 die("Wrong input: Fuel type");
             }
             //Refueled
-            if(!preg_match('/^\d+(\.\d+)?$/', $data['refueled'])){
+            if(!preg_match('/^\d+(\.\d+)?$/', $data['refueled']) && !empty($data['refueled'])){
                 die("Wrong input: Refueled");
             }
             //Currency
@@ -66,15 +66,15 @@ class FuelReceiptInsert
                     break;
                 }
             }
-            if(!$curMatch){
+            if(!$curMatch && !empty($data['currency'])){
                 die("Wrong input: Currency");
             }
             //Fuel price
-            if(!preg_match('/^\d+(\.\d+)?$/', $data['fuel_price'])){
+            if(!preg_match('/^\d+(\.\d+)?$/', $data['fuel_price']) && !empty($data['fuel_price'])){
                 die("Wrong input: Fuel price");
             }
             //Odometer
-            if(!preg_match('/^[0-9]+$/', $data['odometer'])){
+            if(!preg_match('/^[0-9]+$/', $data['odometer']) && !empty($data['odometer'])){
                 die("Wrong input: Odometer");
             }
             $data['total'] = $data['fuel_price'] * $data['refueled'];
