@@ -26,6 +26,9 @@ class FuelReceiptInsert
                 'total' => ''
             ];
             //Convert time zone
+            if(empty($data['date_time'])){
+                die("No date entered");
+            }
             $localDT = new DateTime($data['date_time'], new DateTimeZone(date_default_timezone_get()));
             $localDT->setTimezone(new DateTimeZone('UTC'));
             $utcDT = $localDT->format('Y-m-d\TH:i');
