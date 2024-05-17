@@ -110,12 +110,12 @@ class FuelReceiptRequest
     private function displayData(string $query): void
     {
         $db = new DB();
-        foreach ($db::bannedWords as $bw) {
+        /*foreach ($db::bannedWords as $bw) {
             if (stristr($query, $bw)) {
                 echo "<script>window.location.replace('/')</script>";
                 exit;
             }
-        }
+        }*/
 
         //connection
         $conn = $db->connectDB();

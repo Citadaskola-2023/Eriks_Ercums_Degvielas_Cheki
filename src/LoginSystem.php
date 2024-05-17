@@ -20,6 +20,7 @@ class LoginSystem
     }
 
     public function isLoggedIn(): void {
+        session_start();
         if(!isset($_SESSION['username']))
         {
             $this->logout();
@@ -28,9 +29,19 @@ class LoginSystem
     }
 
     public function logout(): void {
-        session_start();
-        session_unset();
+        if(session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION = [];
         session_destroy();
+
+        ob_start();
         header("Location: /?");
+        ob_end_flush();
+        exit;
     }
+}
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+    $login = new \App\LoginSystem();
+    $login->logout();
 }

@@ -1,7 +1,7 @@
 <?php
-/*require_once '../src/LoginSystem.php';
+require_once '../src/LoginSystem.php';
 $loginSystem = new \App\LoginSystem();
-$loginSystem->isLoggedIn();*/
+$loginSystem->isLoggedIn();
 //load header
 require '../controller/header.php';
 

@@ -1,5 +1,4 @@
 <?php
-
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +12,6 @@
 <header>
     <a href="../receipt">Receipt</a>
     <a href="../data">Data</a>
-    <a href="../?">Logout</a>
+    <a href="..?logout=true">Logout</a>
 </header>
 </html>

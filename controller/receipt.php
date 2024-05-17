@@ -1,7 +1,7 @@
 <?php
-/*require_once '../src/LoginSystem.php';
+require_once '../src/LoginSystem.php';
 $loginSystem = new \App\LoginSystem();
-$loginSystem->isLoggedIn();*/
+$loginSystem->isLoggedIn();
 
 require __DIR__ . '/../src/FuelReceiptInsert.php';
 //load header
